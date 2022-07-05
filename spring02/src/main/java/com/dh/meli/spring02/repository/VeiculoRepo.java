@@ -33,7 +33,7 @@ public class VeiculoRepo {
             }
         }
 
-        throw new RuntimeException("Veiculo não localizado");
+        throw new NotFoundException("Veiculo não localizado");
 //        return null;
     }
 
