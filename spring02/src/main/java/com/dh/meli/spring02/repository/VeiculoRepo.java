@@ -1,7 +1,6 @@
 package com.dh.meli.spring02.repository;
 
 import com.dh.meli.spring02.exception.NotFoundException;
-import com.dh.meli.spring02.exception.NotFoundExceptionDetalhes;
 import com.dh.meli.spring02.model.Veiculo;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
