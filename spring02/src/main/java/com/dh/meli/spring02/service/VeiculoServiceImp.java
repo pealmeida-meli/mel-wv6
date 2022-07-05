@@ -35,4 +35,29 @@ public class VeiculoServiceImp implements VeiculoService {
         repo.saveVeiculo(novoVeiculo);
     }
 
+    @Override
+    public List<VeiculoDto> getAllOrderByValor() {
+        List<Veiculo> listaVeiculos = repo.getAllVeiculo();
+        return  listaVeiculos.stream()
+                .sorted()
+                .map(VeiculoDto::new)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<VeiculoDto> getAllOrderByModelo() {
+        List<Veiculo> listaVeiculos = repo.getAllVeiculo();
+        return  listaVeiculos.stream()
+                .sorted( (v1, v2)-> v1.getModelo().compareTo(v2.getModelo()) )
+                .map(VeiculoDto::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VeiculoDto> getByModelo(String modelo) {
+        List<Veiculo> listaVeiculos = repo.getAllVeiculo();
+        return  listaVeiculos.stream()
+                .filter( v -> v.getModelo().equalsIgnoreCase(modelo))
+                .map(VeiculoDto::new)
+                .collect(Collectors.toList());
+    }
 }
