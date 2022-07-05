@@ -1,5 +1,6 @@
 package com.dh.meli.spring02.controller;
 
+import com.dh.meli.spring02.dto.VeiculoDto;
 import com.dh.meli.spring02.model.Veiculo;
 import com.dh.meli.spring02.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ public class VeiculoController {
     private VeiculoService service;
 
     @GetMapping("/{placa}")
-    public ResponseEntity<Veiculo> getVeiculo(@PathVariable String placa) {
+    public ResponseEntity<VeiculoDto> getVeiculo(@PathVariable String placa) {
         return ResponseEntity.ok().body(service.getVeiculo(placa));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Veiculo>> getAllVeiculo() {
-        List<Veiculo> lista = service.getAllVeiculo();
+    public ResponseEntity<List<VeiculoDto>> getAllVeiculo() {
+        List<VeiculoDto> lista = service.getAllVeiculo();
         return ResponseEntity.ok(lista);
     }
 
