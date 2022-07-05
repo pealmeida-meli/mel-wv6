@@ -1,5 +1,7 @@
 package com.dh.meli.spring02.repository;
 
+import com.dh.meli.spring02.exception.NotFoundException;
+import com.dh.meli.spring02.exception.NotFoundExceptionDetalhes;
 import com.dh.meli.spring02.model.Veiculo;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,16 +24,17 @@ public class VeiculoRepo {
         try {
             lista = Arrays.asList
                     (mapper.readValue(new File(linkFile), Veiculo[].class));
-
-            for (Veiculo v : lista) {
-                if (v.getPlaca().equals(placa)) {
-                    return v;
-                }
-            }
         } catch (Exception ex) {
 
         }
-        return null;
+        for (Veiculo v : lista) {
+            if (v.getPlaca().equals(placa)) {
+                return v;
+            }
+        }
+
+        throw new RuntimeException("Veiculo não localizado");
+//        return null;
     }
 
     public List<Veiculo> getAllVeiculo() {
