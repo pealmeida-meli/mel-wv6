@@ -22,7 +22,29 @@ public class ProprietarioServiceImp implements ProprietarioService {
 
     @Override
     public List<Proprietario> getAllProprietario() {
-        return null;
+        List<Veiculo> listaVeiculos = new ArrayList<>(veiculoRepo.getAllVeiculo());
+        List<Proprietario> listaProprietarios = proprietarioRepo.getAllProprietario();
+        AtomicInteger cont = new AtomicInteger();
+//        listaProprietarios.stream()
+//                .forEach(proprietario ->
+//                        listaVeiculos.forEach(veiculo -> {
+//                    if(veiculo.getId_proprietario() == proprietario.getId()){
+//                        proprietario.addVeiculo(veiculo);
+//                    }
+//                }));
+
+        listaProprietarios.stream()
+                .forEach(proprietario -> {
+                    for (int i = 0; i < listaVeiculos.size(); i++) {
+                        cont.getAndIncrement();
+                        if(listaVeiculos.get(i).getId_proprietario() == proprietario.getId()){
+                            proprietario.addVeiculo(listaVeiculos.remove(i));
+                            i--;
+                        }
+                    }
+                });
+        System.out.println("Contagem:" + cont);
+        return listaProprietarios;
     }
 
 

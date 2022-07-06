@@ -18,5 +18,11 @@ public class Proprietario {
     private String telefone;
     private List<Veiculo> veiculos;
 
+    public void addVeiculo(Veiculo v) {
+        if(veiculos == null){
+            veiculos = new ArrayList<>();
+        }
+        veiculos.add(v);
+    }
 
 }
