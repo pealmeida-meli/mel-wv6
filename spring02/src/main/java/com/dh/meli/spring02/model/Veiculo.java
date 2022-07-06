@@ -15,6 +15,7 @@ public class Veiculo implements Comparable<Veiculo> {
     private String modelo;
     private double valor;
     private String renavam;
+    private int id_proprietario;
 
     @Override
     public int compareTo(Veiculo outro) {

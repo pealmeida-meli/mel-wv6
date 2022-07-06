@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 public class VeiculoRepo {
-    private final String linkFile = "src/main/resources/dados.json";
+    private final String linkFile = "src/main/resources/veiculos.json";
 
     public Veiculo getVeiculo(String placa) {
         ObjectMapper mapper = new ObjectMapper();
