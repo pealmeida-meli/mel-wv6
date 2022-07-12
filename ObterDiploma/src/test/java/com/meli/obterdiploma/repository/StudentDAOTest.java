@@ -3,10 +3,7 @@ package com.meli.obterdiploma.repository;
 import com.meli.obterdiploma.exception.StudentNotFoundException;
 import com.meli.obterdiploma.model.StudentDTO;
 import com.meli.obterdiploma.util.TestUtilsGenerator;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,12 +12,12 @@ class StudentDAOTest {
 
     private IStudentDAO studentDAO;
 
-    @AfterAll
-    public static void tearDown() {
-        TestUtilsGenerator.emptyUsersFile();
-    }
+//    @AfterAll
+//    public static void tearDown() {
+//        TestUtilsGenerator.emptyUsersFile();
+//    }
 
-    @BeforeEach
+    @BeforeEach @AfterEach
     void setup() {
         studentDAO = new StudentDAO();
         TestUtilsGenerator.emptyUsersFile();
@@ -101,7 +98,8 @@ class StudentDAOTest {
         assertThat(foundStudent.getId()).isEqualTo(savedStudent.getId());
         assertThat(foundStudent.getStudentName()).isEqualTo(savedStudent.getStudentName());
     }
-        @Test
+
+    @Test
     void findById_throwException_whenStudentNotExist() {
         StudentDTO student = TestUtilsGenerator.getStudentWithId();
 
@@ -111,8 +109,6 @@ class StudentDAOTest {
 
             assertThat(exception.getError().getDescription()).contains(student.getId().toString());
             assertThat(exception.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
-
     }
-
 
 }
