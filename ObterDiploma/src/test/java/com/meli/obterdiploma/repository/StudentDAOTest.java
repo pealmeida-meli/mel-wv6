@@ -17,10 +17,10 @@ class StudentDAOTest {
 //        TestUtilsGenerator.emptyUsersFile();
 //    }
 
-    @BeforeEach @AfterEach
+    @BeforeEach
     void setup() {
-        studentDAO = new StudentDAO();
         TestUtilsGenerator.emptyUsersFile();
+        studentDAO = new StudentDAO();
     }
 
     @Test
