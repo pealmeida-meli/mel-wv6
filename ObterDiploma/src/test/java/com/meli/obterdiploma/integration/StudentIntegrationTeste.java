@@ -3,11 +3,8 @@ package com.meli.obterdiploma.integration;
 import com.meli.obterdiploma.model.StudentDTO;
 import com.meli.obterdiploma.repository.StudentDAO;
 import com.meli.obterdiploma.util.TestUtilsGenerator;
-import lombok.extern.log4j.Log4j2;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,21 +15,19 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.validation.Valid;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class StudentIntegration {
-
-    @LocalServerPort
-    private int port;
+public class StudentIntegrationTeste {
 
     @Autowired
     TestRestTemplate testRestTemplate;
+    @LocalServerPort
+    private int port;
 
-    @BeforeEach @AfterEach
-    public void setup(){
+    @BeforeEach
+    @AfterEach
+    public void setup() {
         TestUtilsGenerator.emptyUsersFile();
     }
 
@@ -43,7 +38,7 @@ public class StudentIntegration {
         HttpEntity<StudentDTO> httpEntity = new HttpEntity<>(newStudent);
 
         //exchage(URL, método Http, body, tipo de objeto)
-        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl+"/registerStudent",
+        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl + "/registerStudent",
                 HttpMethod.POST, httpEntity, StudentDTO.class);
 
         StudentDTO studentReturned = retorno.getBody();
@@ -61,7 +56,7 @@ public class StudentIntegration {
         HttpEntity<StudentDTO> httpEntity = new HttpEntity<>(newStudent);
 
         //exchage(URL, método Http, body, tipo de objeto)
-        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl+"/registerStudent",
+        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl + "/registerStudent",
                 HttpMethod.POST, httpEntity, StudentDTO.class);
 
         assertThat(retorno.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -73,20 +68,20 @@ public class StudentIntegration {
         String baseUrl = "http://localhost:" + port + "/student";
 
         //exchage(URL, método Http, body, tipo de objeto)
-        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl+"/getStudent/"+student.getId(),
+        ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(baseUrl + "/getStudent/" + student.getId(),
                 HttpMethod.GET, null, StudentDTO.class);
 
         assertThat(retorno.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
-   @Test
+    @Test
     public void getStudent_returnStudent_whenStudentExist() {
         StudentDTO newStudent = TestUtilsGenerator.getNewStudentWithOneSubject();
         String baseUrl = "http://localhost:" + port + "/student/getStudent/";
         StudentDAO dao = new StudentDAO();
         StudentDTO studentSaved = dao.save(newStudent);
-
-        String url = String.format(baseUrl+"%d", studentSaved.getId());
+        dao = null;
+        String url = String.format(baseUrl + "%d", studentSaved.getId());
 
         ResponseEntity<StudentDTO> retorno = testRestTemplate.exchange(url,
                 HttpMethod.GET, null, StudentDTO.class);
@@ -96,7 +91,7 @@ public class StudentIntegration {
         assertThat(retorno.getBody().getStudentName()).isEqualTo(studentSaved.getStudentName());
     }
 
-   @Test
+    @Test
     public void modifyStudent_returnStatusNoContent_whenStudentExist() {
         String baseUrl = "http://localhost:" + port + "/student/modifyStudent";
 

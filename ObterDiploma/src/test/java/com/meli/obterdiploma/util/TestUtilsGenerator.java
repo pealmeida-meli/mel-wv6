@@ -41,7 +41,7 @@ public class TestUtilsGenerator {
             e.printStackTrace();
         }
 
-        writer.print("[]");
+        writer.print("{}");
         writer.close();
     }
 

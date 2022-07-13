@@ -24,4 +24,11 @@ public class StudentDTO {
 
     @NotEmpty(message = "A lista de assuntos não pode ficar vazia.")
     List<@Valid SubjectDTO> subjects;
+
+    public StudentDTO(StudentDTO std) {
+        this.id = std.getId();
+        this.studentName = std.getStudentName();
+        this.subjects = std.getSubjects();
+    }
+
 }

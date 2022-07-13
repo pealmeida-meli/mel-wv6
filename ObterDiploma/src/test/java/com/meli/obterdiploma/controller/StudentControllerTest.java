@@ -47,7 +47,7 @@ class StudentControllerTest {
 
         ResponseEntity<StudentDTO> response = controller.registerStudent(newStudent);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getId())
                 .isNotNull()
