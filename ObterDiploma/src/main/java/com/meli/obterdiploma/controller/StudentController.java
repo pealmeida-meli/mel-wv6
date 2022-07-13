@@ -3,6 +3,7 @@ package com.meli.obterdiploma.controller;
 import com.meli.obterdiploma.model.StudentDTO;
 import com.meli.obterdiploma.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.convert.PeriodUnit;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +31,10 @@ public class StudentController {
         return ResponseEntity.ok(studentService.read(id));
     }
 
-    @PostMapping("/modifyStudent")
-    public ResponseEntity<?> modifyStudent(@RequestBody @Valid StudentDTO stu) {
+    @PutMapping("/modifyStudent")
+    public ResponseEntity<Void> modifyStudent(@RequestBody @Valid StudentDTO stu) {
         this.studentService.update(stu);
-        return ResponseEntity.ok(null);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/removeStudent/{id}")

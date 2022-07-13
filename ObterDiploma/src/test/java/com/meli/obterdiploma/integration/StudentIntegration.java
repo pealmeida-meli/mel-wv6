@@ -5,6 +5,7 @@ import com.meli.obterdiploma.repository.StudentDAO;
 import com.meli.obterdiploma.util.TestUtilsGenerator;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import javax.validation.Valid;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,7 +31,7 @@ public class StudentIntegration {
     @Autowired
     TestRestTemplate testRestTemplate;
 
-    @BeforeEach
+    @BeforeEach @AfterEach
     public void setup(){
         TestUtilsGenerator.emptyUsersFile();
     }
@@ -91,6 +94,26 @@ public class StudentIntegration {
         assertThat(retorno.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(retorno.getBody().getId()).isEqualTo(studentSaved.getId());
         assertThat(retorno.getBody().getStudentName()).isEqualTo(studentSaved.getStudentName());
+    }
+
+   @Test
+    public void modifyStudent_returnStatusNoContent_whenStudentExist() {
+        String baseUrl = "http://localhost:" + port + "/student/modifyStudent";
+
+        StudentDTO newStudent = TestUtilsGenerator.getNewStudentWithOneSubject();
+        StudentDAO dao = new StudentDAO();
+        StudentDTO studentSaved = dao.save(newStudent);
+
+        studentSaved.setStudentName("Novo nome");
+        HttpEntity<StudentDTO> httpEntity = new HttpEntity<>(studentSaved);
+
+        ResponseEntity<Void> retorno = testRestTemplate.exchange(baseUrl,
+                HttpMethod.PUT, httpEntity, Void.class);
+
+        assertThat(retorno.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        StudentDTO studentFound = dao.findById(studentSaved.getId());
+        assertThat(studentFound.getStudentName()).isEqualTo(studentSaved.getStudentName());
     }
 
 }
