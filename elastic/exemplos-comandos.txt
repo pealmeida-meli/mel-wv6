@@ -1,0 +1,68 @@
+#Verifica o status do cluster
+GET _cluster/health
+
+#Verifica o status dos nós
+GET _nodes/stats
+
+# cria um novo índice (BD)
+PUT comidas_preferidas
+
+#listar os índices existentes
+GET _cat/indices?v=true
+
+#inserir um novo documento, id gerado pelo elastic
+POST comidas_preferidas/_doc
+{
+  "nome": "Danielen",
+  "comida": "pizza"
+}
+
+#Consultar um documento por ID
+GET comidas_preferidas/_doc/TnGbHIIB83xi00B-xsjq
+
+#inserir um novo documento, ID enviado na requisição
+PUT comidas_preferidas/_doc/1
+{
+  "nome": "Felipe",
+  "comida": "Lazanha"
+}
+
+#Atualiza o documento pois o Id já existe
+PUT comidas_preferidas/_doc/1
+{
+  "nome": "Larissa",
+  "comida": "Parmegiana"
+}
+
+#Insere um novo documento, recusando caso o Id já exista
+PUT comidas_preferidas/_create/1
+{
+  "nome":"Samantha",
+  "comida":"Strogonof"
+}
+
+#consulta o documento por Id
+GET comidas_preferidas/_doc/1
+
+#atualiza o documento com o Id e dados fornecidos
+POST comidas_preferidas/_update/1
+{
+  "doc": {
+    "comida":"Mousse Chocolate"
+  }
+}
+
+#lista os documentos do indice
+GET comidas_preferidas/_search
+
+#altera as configurações para o índice
+PUT comidas_preferidas/_settings
+{
+  "index":{
+    "number_of_replicas": 0
+  }
+}
+
+
+
+
