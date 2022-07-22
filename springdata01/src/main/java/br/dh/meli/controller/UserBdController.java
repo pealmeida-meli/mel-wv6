@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -20,36 +20,38 @@ public class UserBdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserBD> buscaPorId(@PathVariable long id) {
-        Optional<UserBD> userFound = service.getUserById(id);
+        return ResponseEntity.ok(service.getUserById(id));
+    }
 
-        if(userFound.isPresent()) {
-            return ResponseEntity.ok(userFound.get());
-        }
-        return ResponseEntity.notFound().build();
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserBD> buscaPorId(@PathVariable String email) {
+        return ResponseEntity.ok(service.findByEmail(email));
     }
 
     @PostMapping
     public ResponseEntity<UserBD> insertNewUser(@RequestBody UserBD user) {
-        // TODO: validar se o user tem ID: disparar exception
-
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertUser(user));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUSer(@PathVariable long id) {
-        Optional<UserBD> userFound = service.getUserById(id);
-
-        if(userFound.isPresent()){
-            service.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        service.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
-
 
     @GetMapping
     public ResponseEntity<List<UserBD>> listAll() {
         return ResponseEntity.ok(service.listAll());
+    }
+
+    @PutMapping
+    public ResponseEntity<UserBD> updateUser(@RequestBody UserBD user) {
+        return ResponseEntity.ok(service.update(user));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserBD> updateUser(@PathVariable long id, @RequestBody Map<String, String> changes) {
+        return ResponseEntity.ok(service.updatePartial(id, changes));
     }
 
 }
