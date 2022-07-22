@@ -1,69 +1,65 @@
 package br.dh.meli.service;
 
+import br.dh.meli.dto.UpdateUserRequest;
 import br.dh.meli.exception.BadRequestException;
 import br.dh.meli.exception.UserNotFoundException;
-import br.dh.meli.model.UserBD;
-import br.dh.meli.repository.IUserBdRepo;
+import br.dh.meli.model.AppUser;
+import br.dh.meli.repository.IAppUserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
-    private IUserBdRepo repo;
+    private IAppUserRepository repo;
+
+    @Autowired
+    private ModelMapper mapper;
 
     @Override
-    public UserBD getUserById(long id) {
-        return repo.findById(id).orElseThrow(()-> new UserNotFoundException("Usuário não encontrado. id: " + id));
+    public AppUser getUserById(long id) {
+        return repo.findById(id).orElseThrow(() -> new UserNotFoundException("Usuário não encontrado. id: " + id));
     }
 
     @Override
-    public UserBD insertUser(UserBD newUser) {
-        if(newUser.getId() > 0) {
+    public AppUser insertUser(AppUser newUser) {
+        if (newUser.getId() != null) {
             throw new BadRequestException("O usuário não pode ter Id para ser inseridos");
-        };
+        }
         return repo.save(newUser);
     }
 
     @Override
-    public UserBD update(UserBD user) {
-        UserBD userFound = getUserById(user.getId());
-
+    public AppUser update(AppUser user) {
+        getUserById(user.getId());
         return repo.save(user);
     }
 
     @Override
-    public UserBD updatePartial(long id, Map<String, String> changes) {
-        UserBD userFound = getUserById(id);
-
-        changes.forEach( (atributo, valor)-> {
-            switch (atributo){
-                case "name": userFound.setName(valor); break;
-                case "email": userFound.setEmail(valor); break;
-            }
-        });
-
+    public AppUser updatePartial(long id, UpdateUserRequest changes) {
+        AppUser userFound = getUserById(id);
+        mapper.map(changes, userFound);
         return repo.save(userFound);
     }
 
 
     @Override
     public void deleteUser(long id) {
-        UserBD userFound = getUserById(id);
+        AppUser userFound = getUserById(id);
         repo.delete(userFound);
     }
 
     @Override
-    public List<UserBD> listAll() {
-        return (List<UserBD>) repo.findAll();
+    public List<AppUser> listAll() {
+        return (List<AppUser>) repo.findAll();
     }
 
     @Override
-    public UserBD findByEmail(String email) {
+    public AppUser findByEmail(String email) {
         return repo.findByEmail(email);
     }
 
