@@ -1,5 +1,6 @@
 package br.dh.meli.service;
 
+import br.dh.meli.exception.UserNotFoundException;
 import br.dh.meli.model.UserBD;
 import br.dh.meli.repository.IUserBdRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserService implements IUserService {
         if(repo.findById(id).isPresent()) {
             repo.deleteById(id);
         }
-        // TODO: lançar exception UserNotFound
+        throw new UserNotFoundException("Usuário não encontrado");
     }
 
     @Override
