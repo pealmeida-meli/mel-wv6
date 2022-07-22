@@ -5,6 +5,7 @@ import br.dh.meli.repository.IUserBdRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,9 @@ public class UserService implements IUserService {
         // TODO: lançar exception UserNotFound
     }
 
+    @Override
+    public List<UserBD> listAll() {
+        return (List<UserBD>) repo.findAll();
+    }
 
 }
