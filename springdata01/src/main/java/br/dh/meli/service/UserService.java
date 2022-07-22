@@ -24,4 +24,13 @@ public class UserService implements IUserService {
         return repo.save(newUser);
     }
 
+    @Override
+    public void deleteUser(long id) {
+        if(repo.findById(id).isPresent()) {
+            repo.deleteById(id);
+        }
+        // TODO: lançar exception UserNotFound
+    }
+
+
 }

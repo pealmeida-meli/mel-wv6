@@ -34,6 +34,16 @@ public class UserBdController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.insertUser(user));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUSer(@PathVariable long id) {
+        Optional<UserBD> userFound = service.getUserById(id);
+
+        if(userFound.isPresent()){
+            service.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 
 }
