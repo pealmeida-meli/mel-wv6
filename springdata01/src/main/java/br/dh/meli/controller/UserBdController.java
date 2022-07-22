@@ -3,8 +3,11 @@ package br.dh.meli.controller;
 import br.dh.meli.model.UserBD;
 import br.dh.meli.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -16,12 +19,21 @@ public class UserBdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserBD> buscaPorId(@PathVariable long id) {
-        UserBD userFound = service.getUserById(id);
+        Optional<UserBD> userFound = service.getUserById(id);
 
-        if(userFound != null) {
-            return ResponseEntity.ok(userFound);
+        if(userFound.isPresent()) {
+            return ResponseEntity.ok(userFound.get());
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PostMapping
+    public ResponseEntity<UserBD> insertNewUser(@RequestBody UserBD user) {
+        // TODO: validar se o user tem ID: disparar exception
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.insertUser(user));
+    }
+
+
 
 }
